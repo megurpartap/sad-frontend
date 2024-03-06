@@ -76,9 +76,16 @@
 }
 
 .registerbg {
-  background: url("/public/sad-logo.png");
+  background: url("/sad-logo.png");
   background-size: 120px;
   background-repeat: space space;
   background-attachment: fixed;
   z-index: -2;
+}
+
+.DialogContent {
+  min-width: 1500px;
+  background: white;
+  padding: 30px;
+  border-radius: 4px;
 }

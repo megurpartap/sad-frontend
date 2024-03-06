@@ -1,4 +1,5 @@
-import React from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,8 +26,10 @@ import { Textarea } from "@/components/ui/textarea";
 import countries from "@/constants/countries.json";
 import indianStates from "@/constants/indianStates.json";
 import punjabDistricts from "@/constants/punjabDistricts.json";
+import memberService from "@/services/crudServices/memberServices";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
-const interests = [
+const skills = [
   {
     id: "journalism",
     label: "Journalism",
@@ -72,7 +75,7 @@ const formSchema = z.object({
       required_error: "email-Id is required",
     })
     .email({ message: "Invalid email address" }),
-  adhaarCardNumber: z
+  adhaarNumber: z
     .string({
       required_error: "Adhaar Card Number is required",
     })
@@ -87,7 +90,7 @@ const formSchema = z.object({
     .string({
       required_error: "Mobile Number is required",
     })
-    .length(10, "Mobile Number is required"),
+    .min(10, "Enter Valid Mobile Number"),
   state: z
     .string({
       required_error: "State is required",
@@ -95,9 +98,9 @@ const formSchema = z.object({
     .min(1, "State is required"),
   country: z
     .string({
-      required_error: "State is required",
+      required_error: "Country is required",
     })
-    .min(1, "State is required"),
+    .min(1, "Country is required"),
   district: z
     .string({
       required_error: "District is required",
@@ -115,46 +118,79 @@ const formSchema = z.object({
       required_error: "Volunteer Region is required",
     })
     .min(1, "Volunteer Region is required"),
-  interests: z.array(z.string()).refine((value) => value.some((item) => item), {
+  skills: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one item.",
   }),
 });
 
 const MemberRegisterForm = () => {
+  const [photoValue, setPhotoValue] = useState(null);
+  const [loading, setLoading] = useState(false);
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: undefined,
       email: undefined,
-      adhaarCardNumber: undefined,
+      adhaarNumber: undefined,
       fatherHusbandName: undefined,
       isHusbandName: false,
       mobileNumber: undefined,
+      country: "IN",
       state: undefined,
       district: undefined,
+      photo: undefined,
       village: undefined,
       tehsil: undefined,
       fullAddress: undefined,
       volunteerRegion: undefined,
-      interests: [],
+      skills: [],
     },
   });
 
   const watchCountry = form.watch("country");
   const watchState = form.watch("state");
   // 2. Define a submit handler.
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(data) {
+    try {
+      setLoading(true);
+      if (!photoValue) {
+        alert("Please Upload Photo");
+        setLoading(false);
+        return;
+      }
+      const formData = new FormData();
+      formData.append("files", photoValue);
+      const id = await memberService.uploadImage(formData);
+      if (id) {
+        const res = await memberService.addNewMember({
+          ...data,
+          photo: id,
+        });
+        if (res) {
+          alert("Member Added Successfully");
+          setLoading(false);
+        } else {
+          alert("Error Occured");
+          setLoading(false);
+        }
+      } else {
+        alert("Error Occured");
+        setLoading(false);
+      }
+    } catch (error) {
+      alert(error.message);
+      setLoading(false);
+    }
   }
   return (
-    <div className="sm:w-[700px] sm:mt-3 sm:border-[1px] border-gray-400 bg-white w-full sm:rounded-lg sm:shadow p-4 relative z-10">
-      <div className="formHeader sm:flex sm:justify-around border-b-2 border-gray-100 pb-6 ">
-        <div className=" w-2/12 flex items-center justify-center">
-          <img src="/sad-logo.png" alt="" srcset="" className="w-full" />
+    <div className="sm:w-[700px] sm:border-[1px] border-gray-400 bg-white w-full sm:rounded-lg sm:shadow p-4 relative z-10">
+      <div className="formHeader  flex flex-col items-center sm:flex-row sm:justify-around border-b-2 border-gray-100 pb-6 ">
+        <div className=" sm:w-2/12 w-1/3 flex items-center justify-center">
+          <img src="/sad-logo.png" alt="" className="w-full" />
         </div>
-        <div className="w-9/12 flex items-center justify-center">
-          <h1 className="text-5xl text-center font-bold">
+        <div className=" sm:w-9/12 flex items-center justify-center">
+          <h1 className="text-2xl sm:text-5xl text-center font-bold">
             Shiromani Akali Dal Amritsar Member Registration Form
           </h1>
         </div>
@@ -162,7 +198,8 @@ const MemberRegisterForm = () => {
       <div className="formBody py-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 grid-rows-1 gap-4">
+            {/* full Name and email */}
+            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="fullName"
@@ -192,10 +229,11 @@ const MemberRegisterForm = () => {
                 )}
               />
             </div>
-            <div className="grid grid-cols-2 grid-rows-1 gap-4">
+            {/* adhaar card and father husband */}
+            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
-                name="adhaarCardNumber"
+                name="adhaarNumber"
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
@@ -254,7 +292,8 @@ const MemberRegisterForm = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 grid-rows-1 gap-4">
+            {/* country and mobile */}
+            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="country"
@@ -272,7 +311,7 @@ const MemberRegisterForm = () => {
                       </FormControl>
                       <SelectContent>
                         {countries.countries.map((country) => (
-                          <SelectItem key={country.code} value={country.code}>
+                          <SelectItem key={country.code} value={country.name}>
                             {country.name}
                           </SelectItem>
                         ))}
@@ -297,81 +336,87 @@ const MemberRegisterForm = () => {
                 )}
               />
             </div>
-            <div className="grid grid-cols-2 grid-rows-1 gap-4">
-              {console.log(form.getValues("country"))}
-              {watchCountry === "IN" ? (
-                <FormField
-                  control={form.control}
-                  name="state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Select State / ਤੁਹਾਡੀ ਸਟੇਟ</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select State" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {indianStates.states.map((state) => (
-                            <SelectItem key={state.code} value={state.name}>
-                              {state.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            {/* state and district */}
+            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
+              {watchCountry === "India" ? (
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Select State / ਤੁਹਾਡੀ ਸਟੇਟ</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select State" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {indianStates.states.map((state) => (
+                              <SelectItem key={state.code} value={state.name}>
+                                {state.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               ) : (
-                <FormField
-                  control={form.control}
-                  name="state"
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Enter State / ਤੁਹਾਡੀ ਸਟੇਟ</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter State" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Enter State / ਤੁਹਾਡੀ ਸਟੇਟ</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter State" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               )}
 
-              {watchCountry === "IN" && watchState === "Punjab" ? (
-                <FormField
-                  control={form.control}
-                  name="district"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Select District / ਤੁਹਾਡਾ ਜ਼ਿਲ੍ਹਾ</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select District" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {punjabDistricts.districts.map((district) => (
-                            <SelectItem key={district} value={district}>
-                              {district}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {watchCountry === "India" && watchState === "Punjab" ? (
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Select District / ਤੁਹਾਡਾ ਜ਼ਿਲ੍ਹਾ</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select District" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {punjabDistricts.districts.map((district) => (
+                              <SelectItem key={district} value={district}>
+                                {district}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               ) : (
                 <FormField
                   control={form.control}
@@ -389,7 +434,8 @@ const MemberRegisterForm = () => {
                 />
               )}
             </div>
-            <div className="grid grid-cols-1 grid-rows-1 gap-4">
+            {/* address */}
+            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="fullAddress"
@@ -404,7 +450,8 @@ const MemberRegisterForm = () => {
                 )}
               />
             </div>
-            <div className="grid grid-cols-2 grid-rows-1 gap-4">
+            {/* village and tehsil */}
+            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="village"
@@ -421,7 +468,7 @@ const MemberRegisterForm = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name="tehsil"
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
@@ -434,26 +481,20 @@ const MemberRegisterForm = () => {
                 )}
               />
             </div>
-            <div className="grid grid-cols-1 grid-rows-1 gap-4">
-              <FormField
-                control={form.control}
+            {/* photo */}
+            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
+              <input
+                type="file"
                 name="photo"
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Upload Your Photo / ਤੁਹਾਡੀ ਫੋਟੋ </FormLabel>
-                    <FormControl>
-                      <Input type="file" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                id="photo"
+                onChange={(e) => setPhotoValue(e.target.files[0])}
               />
             </div>
-            <div className="grid grid-cols-1 grid-rows-1 gap-4">
+            {/* skills */}
+            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
-                name="interests"
+                name="skills"
                 render={() => (
                   <FormItem>
                     <div className="mb-4">
@@ -462,11 +503,11 @@ const MemberRegisterForm = () => {
                       </FormLabel>
                     </div>
                     <div className="ml-4 flex flex-col gap-2">
-                      {interests.map((item) => (
+                      {skills.map((item) => (
                         <FormField
                           key={item.id}
                           control={form.control}
-                          name="interests"
+                          name="skills"
                           render={({ field }) => {
                             return (
                               <FormItem
@@ -504,7 +545,8 @@ const MemberRegisterForm = () => {
                 )}
               />
             </div>
-            <div className="grid grid-cols-1 grid-rows-1 gap-4">
+            {/* volunteer region */}
+            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="volunteerRegion"
@@ -526,8 +568,17 @@ const MemberRegisterForm = () => {
               />
             </div>
             <div className="border-t-2 sm:flex border-gray-100 pt-6">
-              <Button size="lg" type="submit" className="w-full text-xl">
-                Register Now
+              <Button
+                variant="primary"
+                size="lg"
+                type="submit"
+                className="w-full text-xl"
+                disabled={loading}
+              >
+                {loading && (
+                  <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {!loading ? "Register Now" : "Registering..."}
               </Button>
             </div>
           </form>

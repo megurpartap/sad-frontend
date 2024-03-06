@@ -8,14 +8,14 @@ export class MemberService {
       const jwt = Cookies.get("sadSignIn");
       if (jwt) {
         const res = await axios.get(
-          `${conf.strapiUrl}/api/members?filters[blocked][$ne]=true&populate=role`,
+          `${conf.strapiUrl}/api/members?filters[isBlocked][$ne]=true&populate=*`,
           {
             headers: {
               Authorization: "Bearer " + jwt,
             },
           }
         );
-        if (res.data) return res.data;
+        if (res.data) return res.data.data;
       }
       return null;
     } catch (error) {
@@ -25,31 +25,56 @@ export class MemberService {
           "An Error Occured"
       );
     }
-    return null;
   };
 
-  addNewMember = async ({
-    membername,
-    fullName,
-    email,
-    // role,
-    mobileNumber,
-    password,
-  }) => {
+  uploadImage = async (formData) => {
     try {
+      console.log(formData.get("files"));
+      const id = await fetch(`${conf.strapiUrl}/api/upload`, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          return { id: data[0]?.id, status: true };
+        });
+      if (id.status) return id.id;
+      else return null;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error?.message ||
+          error?.message ||
+          "An Error Occured"
+      );
+    }
+  };
+
+  addNewMember = async (data) => {
+    try {
+      console.log(data);
+      const res = await axios.post(`${conf.strapiUrl}/api/members`, {
+        data: data,
+      });
+      if (res.data) return { res: res.data, status: true };
+      throw new Error("couldn't Add New Member");
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error?.message ||
+          error?.message ||
+          "An Error Occured"
+      );
+    }
+  };
+
+  addNewAdmin = async (data) => {
+    try {
+      console.log(data);
       const jwt = Cookies.get("sadSignIn");
       if (jwt) {
         const res = await axios.post(
-          `${conf.strapiUrl}/api/staff/addNewMember`,
+          `${conf.strapiUrl}/api/auth/local/register`,
           {
-            data: {
-              membername,
-              fullName,
-              email,
-              // role,
-              mobileNumber,
-              password,
-            },
+            data: data,
           },
           {
             headers: {
@@ -58,8 +83,8 @@ export class MemberService {
           }
         );
         if (res.data) return { res: res.data, status: true };
+        throw new Error("couldn't Add New Member");
       }
-      throw new Error("couldn't Add New Member");
     } catch (error) {
       throw new Error(
         error.response?.data?.error?.message ||
@@ -93,27 +118,14 @@ export class MemberService {
     }
   };
 
-  manageMember = async ({
-    id,
-    membername,
-    fullName,
-    email,
-    // role,
-    mobileNumber,
-  }) => {
+  manageMember = async (data, id) => {
     try {
       const jwt = Cookies.get("sadSignIn");
       if (jwt) {
         const res = await axios.put(
-          `${conf.strapiUrl}/api/staff/${id}`,
+          `${conf.strapiUrl}/api/members/${id}`,
           {
-            data: {
-              membername,
-              fullName,
-              email,
-              // role,
-              mobileNumber,
-            },
+            data: data,
           },
           {
             headers: {
@@ -124,6 +136,23 @@ export class MemberService {
         if (res.data) return { res: res.data, status: true };
       }
       throw new Error("couldn't Update Member");
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error?.message ||
+          error?.message ||
+          "An Error Occured"
+      );
+    }
+  };
+
+  getIsActive = async (memberId) => {
+    console.log(memberId);
+    try {
+      const res = await axios.get(
+        `${conf.strapiUrl}/api/member/${Number(memberId)}/isActiveMember`
+      );
+      if (res.data) return res.data;
+      return null;
     } catch (error) {
       throw new Error(
         error.response?.data?.error?.message ||

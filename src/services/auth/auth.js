@@ -3,10 +3,10 @@ import conf from "../../conf/conf";
 import Cookies from "js-cookie";
 
 class AuthService {
-  login = async ({ email, password }) => {
+  login = async ({ username, password }) => {
     try {
       const res = await axios.post(`${conf.strapiUrl}/api/auth/local`, {
-        identifier: email,
+        identifier: username,
         password: password,
       });
       if (res) {
@@ -31,14 +31,11 @@ class AuthService {
       let user = null;
       const cookiejwt = Cookies.get("sadSignIn");
       if (cookiejwt) {
-        const res = await axios.get(
-          `${conf.strapiUrl}/api/users/me?populate=role`,
-          {
-            headers: {
-              Authorization: "Bearer " + cookiejwt,
-            },
-          }
-        );
+        const res = await axios.get(`${conf.strapiUrl}/api/users/me`, {
+          headers: {
+            Authorization: "Bearer " + cookiejwt,
+          },
+        });
         user = res.data;
       }
       return user;
