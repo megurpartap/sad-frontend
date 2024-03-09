@@ -17,6 +17,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login as authLogin } from "@/store/authSlice";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   username: z
@@ -32,6 +33,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,7 +58,10 @@ const LoginForm = () => {
           console.log(userData);
           dispatch(authLogin(userData));
           // dispatch(setSuccess("Login successful"));
-          alert("Login successful");
+          toast({
+            variant: "success",
+            title: "Login successful",
+          });
           navigate("/admin/dashboard");
         }
       }
@@ -91,9 +96,12 @@ const LoginForm = () => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enter Username</FormLabel>
+                    <FormLabel>Enter Mobile Number / Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter Username" {...field} />
+                      <Input
+                        placeholder="Enter Mobile Number / Email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

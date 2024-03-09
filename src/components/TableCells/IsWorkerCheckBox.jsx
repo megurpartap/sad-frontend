@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import memberService from "@/services/crudServices/memberServices";
 import { useToast } from "@/components/ui/use-toast";
+import { Checkbox } from "../ui/checkbox";
 
-const ActiveSwitch = ({ row }) => {
+const IsWorkerCheckBox = ({ row }) => {
   const { toast } = useToast();
   const memberId = row.original.id;
-  const [isChecked, setChecked] = useState(row.original.attributes.isActive);
+  const memberData = row.original.attributes;
+  const [isChecked, setChecked] = useState(row.original.attributes.isWorker);
   const onChangeToggle = () => {
     if (!isChecked) {
       memberService
-        .manageMember({ isActive: true }, memberId)
+        .manageMember({ isWorker: true }, memberId)
         .then((res) => {
           toast({
             variant: "success",
-            title: "Member Activated",
+            title: `${memberData.fullName} is now a Worker`,
           });
           setChecked(true);
         })
@@ -23,11 +25,11 @@ const ActiveSwitch = ({ row }) => {
         });
     } else {
       memberService
-        .manageMember({ isActive: false }, memberId)
+        .manageMember({ isWorker: false }, memberId)
         .then((res) => {
           toast({
             variant: "destructive",
-            title: "Member Deactivated",
+            title: `${memberData.fullName} is no longer a Worker`,
           });
           setChecked(false);
         })
@@ -38,9 +40,9 @@ const ActiveSwitch = ({ row }) => {
   };
   return (
     <div className="flex justify-center">
-      <Switch checked={isChecked} onCheckedChange={onChangeToggle} />
+      <Checkbox checked={isChecked} onCheckedChange={onChangeToggle} />
     </div>
   );
 };
 
-export default ActiveSwitch;
+export default IsWorkerCheckBox;

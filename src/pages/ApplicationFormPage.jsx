@@ -6,7 +6,7 @@ const ApplicationFormPage = () => {
   return (
     <div className="sm:py-4 w-full registerbg flex justify-center">
       <div className="w-full h-full bg-white fixed top-0 left-0 opacity-70 z-10"></div>
-      <ApplicationForm />
+      <ApplicationForm redirectUrl="thankyou" />
     </div>
   );
 };

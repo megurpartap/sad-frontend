@@ -5,16 +5,32 @@ import MemberDetailsPanel from "@/components/Extra/MemberDetailsPanel";
 
 const MemberDetailsPage = () => {
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
   const { memberId } = useParams();
   useEffect(() => {
-    try {
-      memberService.getIsActive(memberId).then((res) => {
+    setLoading(true);
+    memberService
+      .getIsActive(memberId)
+      .then((res) => {
         setData(res);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
       });
-    } catch (error) {
-      console.log(error);
-    }
   }, [memberId]);
+
+  if (loading) {
+    return (
+      <div className="sm:py-4 w-full registerbg flex justify-center">
+        <div className="w-full h-full bg-white fixed top-0 left-0 opacity-70 z-10"></div>
+        <div className="sm:w-[700px] sm:border-[1px] h-full grid place-items-center border-gray-400 bg-white w-full sm:rounded-lg sm:shadow p-4 relative z-10">
+          <h1 className="text-2xl font-bold">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="sm:py-4 w-full registerbg flex justify-center">

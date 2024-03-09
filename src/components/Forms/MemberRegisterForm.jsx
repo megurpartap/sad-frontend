@@ -28,6 +28,8 @@ import indianStates from "@/constants/indianStates.json";
 import punjabDistricts from "@/constants/punjabDistricts.json";
 import memberService from "@/services/crudServices/memberServices";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const skills = [
   {
@@ -123,7 +125,9 @@ const formSchema = z.object({
   }),
 });
 
-const MemberRegisterForm = () => {
+const MemberRegisterForm = ({ redirectUrl }) => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [photoValue, setPhotoValue] = useState(null);
   const [loading, setLoading] = useState(false);
   // 1. Define your form.
@@ -168,8 +172,13 @@ const MemberRegisterForm = () => {
           photo: id,
         });
         if (res) {
-          alert("Member Added Successfully");
+          toast({
+            variant: "success",
+            title: "Member Added Successfully",
+          });
           setLoading(false);
+          if (redirectUrl === "reload") window.location.reload();
+          else navigate("/thankyou");
         } else {
           alert("Error Occured");
           setLoading(false);

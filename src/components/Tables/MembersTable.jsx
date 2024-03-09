@@ -1,4 +1,3 @@
-import { AiFillDelete } from "react-icons/ai";
 import { CgMoreAlt } from "react-icons/cg";
 import {
   flexRender,
@@ -14,26 +13,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
+
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import ActionButton from "../TableCells/ActionButton";
 import ActiveSwitch from "../TableCells/ActiveSwitch";
-import GetIdCardPage from "@/pages/GetIdCardPage";
+import GetIdCardPage from "@/components/TableCells/GetIdCardPage";
+import BlockButton from "../TableCells/BlockButton";
+import IsWorkerCheckBox from "../TableCells/IsWorkerCheckBox";
 // import { Card, Typography, Input } from "@material-tailwind/react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const columns = [
+  {
+    accessorFn: (row) => row.id,
+    id: "id",
+    header: () => <div className="text-center">ID</div>,
+    cell: (props) => (
+      <p className="text-center">{`SADA-${Number(props.getValue()) + 1000}`}</p>
+    ),
+  },
   {
     accessorFn: (row) => row.attributes.fullName,
     id: "fullName",
@@ -50,7 +50,9 @@ const columns = [
     accessorFn: (row) => row.attributes.adhaarNumber,
     id: "adhaarNumber",
     header: () => <div className="text-center">Adhaar Number</div>,
-    cell: (props) => <p className="text-center">{props.getValue()}</p>,
+    cell: (props) => (
+      <p className="text-center">XXXXXXXX{props.getValue().slice(8)}</p>
+    ),
   },
   {
     accessorFn: (row) => row.attributes.mobileNumber,
@@ -69,43 +71,25 @@ const columns = [
     cell: ActiveSwitch,
   },
   {
+    id: "isWorker",
+    header: () => <div className="text-center">Worker</div>,
+    cell: IsWorkerCheckBox,
+  },
+  {
     id: "idcard",
-    header: () => <div className="text-center">Active</div>,
+    header: () => <div className="text-center">ID Card</div>,
     cell: GetIdCardPage,
   },
   {
     id: "delete",
-    header: () => <div className="text-center">Active</div>,
-    cell: ({ row }) => (
-      <div className="flex justify-center">
-        <Dialog>
-          <DialogTrigger>
-            <AiFillDelete className="h-5 w-5" color="crimson" />
-          </DialogTrigger>
-          <DialogContent className="max-w-[400px]">
-            <DialogHeader>
-              <DialogTitle>Delete This User?</DialogTitle>
-            </DialogHeader>
-            <DialogFooter>
-              <Button variant="destructive" size="sm">
-                Delete
-              </Button>
-              <DialogClose>
-                <Button size="sm">Cancel</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
-    ),
+    header: () => <div className="text-center">Delete</div>,
+    cell: BlockButton,
   },
 ];
 
 function MembersTable({ tableData }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFiltering, setGlobalFiltering] = useState("");
-  console.log("tabledata", tableData);
-
   const MembersTable = useReactTable({
     data: tableData,
     columns,

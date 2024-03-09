@@ -34,9 +34,15 @@ const Header = () => {
           </Link>
         </div>
         <div className=" px-4 gap-3 hidden sm:flex">
-          <AiOutlineTwitter className="h-6 w-6" color="white" />
-          <ImWhatsapp className="h-6 w-6" color="white" />
-          <FaFacebookF className="h-6 w-6" color="white" />
+          <a href="https://twitter.com/share?url=https%3A%2F%2Fsadamritsar.com%2F&text=Join%20Shiromani%20Akali%20Dal%20(Amritsar)%20for%20a%20better%20punjab.">
+            <AiOutlineTwitter className="h-6 w-6" color="white" />
+          </a>
+          <a href="whatsapp://send?text=https%3A%2F%2Fsadamritsar.com%2F%20Join%20Shiromani%20Akali%20Dal%20(Amritsar)%20for%20a%20better%20punjab.s">
+            <ImWhatsapp className="h-6 w-6" color="white" />
+          </a>
+          <a href="https://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsadamritsar.com%2F">
+            <FaFacebookF className="h-6 w-6" color="white" />
+          </a>
         </div>
         <div className="flex items-center sm:hidden">
           <button

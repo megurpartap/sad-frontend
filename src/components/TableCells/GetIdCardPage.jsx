@@ -3,10 +3,10 @@ import { jsPDF } from "jspdf";
 import conf from "@/conf/conf";
 import imageToBase64 from "image-to-base64/browser";
 import QRCode from "qrcode";
+import { Button } from "../ui/button";
 
 const GetIdCardPage = ({ row }) => {
   const member = row.original.attributes;
-  console.log(member);
   const generateIdCard = async () => {
     const doc = new jsPDF({
       orientation: "landscape",
@@ -27,14 +27,14 @@ const GetIdCardPage = ({ row }) => {
     doc.text(member.mobileNumber, 1.2, 0.9);
     doc.text(member.fullAddress, 1.2, 1.1);
     doc.text(member.email, 1.2, 1.3);
-    doc.save("a4.pdf");
+    doc.save(`${member.fullName}-SADA-${Number(row.original.id) + 1000}.pdf`);
   };
 
   return (
-    <div>
-      <button onClick={generateIdCard} type="primary">
-        Download PDF
-      </button>
+    <div className="flex justify-center">
+      <Button onClick={generateIdCard} size="sm" variant="secondary">
+        Download ID Card
+      </Button>
     </div>
   );
 };

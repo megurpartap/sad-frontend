@@ -29,7 +29,6 @@ export class MemberService {
 
   uploadImage = async (formData) => {
     try {
-      console.log(formData.get("files"));
       const id = await fetch(`${conf.strapiUrl}/api/upload`, {
         method: "POST",
         body: formData,
@@ -51,7 +50,6 @@ export class MemberService {
 
   addNewMember = async (data) => {
     try {
-      console.log(data);
       const res = await axios.post(`${conf.strapiUrl}/api/members`, {
         data: data,
       });
@@ -68,13 +66,18 @@ export class MemberService {
 
   addNewAdmin = async (data) => {
     try {
-      console.log(data);
+      const { username, password, email, fullName } = data;
       const jwt = Cookies.get("sadSignIn");
       if (jwt) {
         const res = await axios.post(
-          `${conf.strapiUrl}/api/auth/local/register`,
+          `${conf.strapiUrl}/api/users`,
           {
-            data: data,
+            username,
+            email,
+            fullName,
+            password,
+            role: 1,
+            isConfirmed: true,
           },
           {
             headers: {
@@ -83,7 +86,7 @@ export class MemberService {
           }
         );
         if (res.data) return { res: res.data, status: true };
-        throw new Error("couldn't Add New Member");
+        throw new Error("couldn't Add New Admin");
       }
     } catch (error) {
       throw new Error(

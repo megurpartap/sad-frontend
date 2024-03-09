@@ -11,6 +11,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "../ui/label";
+import conf from "@/conf/conf";
 
 const camelToFlat = (camel) => {
   const camelCase = camel.replace(/([a-z])([A-Z])/g, "$1 $2").split(" ");
@@ -25,18 +26,32 @@ const camelToFlat = (camel) => {
 
 const ActionButton = ({ row }) => {
   const member = row.original;
+  const memberPhotoData = member.attributes.photo?.data?.attributes;
 
   return (
     <div className="flex justify-center">
       <Dialog>
         <DialogTrigger>
           <div>
-            <Button size="sm">Manage</Button>
+            <Button size="sm">View Details</Button>
           </div>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Activate/Block Member</DialogTitle>
+            {memberPhotoData ? (
+              <div>
+                <img
+                  className=" max-w-36 max-h-36 h-auto w-auto"
+                  src={`${conf.strapiUrl}${memberPhotoData.url}`}
+                  alt="Photo Not Accessible"
+                />
+              </div>
+            ) : (
+              <div>
+                <h6>Photo Not Available</h6>
+              </div>
+            )}
             <div className=" grid grid-cols-4 py-4 ">
               {Object.keys(member.attributes).map((key) => {
                 if (
@@ -47,18 +62,16 @@ const ActionButton = ({ row }) => {
                     "publishedAt",
                     "isBlocked",
                     "isActive",
+                    "isWorker",
+                    "photo",
                   ].includes(key)
                 ) {
                   return (
                     <div key={key} className="py-2 border-b-[1px]">
                       <div className="flex gap-2">
                         <Label>{camelToFlat(key)}</Label>
-                        {/* <BsPencilSquare
-                          className="h-4 w-4 opacity-65"
-                          color="gray"
-                        /> */}
                       </div>
-                      <h6>{String(member.attributes[key])}</h6>
+                      <h6>{String(member.attributes[key]) || "-"}</h6>
                     </div>
                   );
                 }

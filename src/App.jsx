@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import authService from "./services/auth/auth";
 import { login, logout } from "./store/authSlice";
 import MemberDetailsPage from "./pages/MemberDetailsPage";
+import HomePage from "./pages/HomePage";
+import ThankYouPage from "./pages/ThankYouPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,8 +32,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path="/" element={<ApplicationFormPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<ApplicationFormPage />} />
             <Route path="/register" element={<RegistrationFormPage />} />
+            <Route path="/thankyou" element={<ThankYouPage />} />
             <Route
               path="/memberDetails/:memberId"
               element={<MemberDetailsPage />}
