@@ -68,15 +68,12 @@ const Header = () => {
         leaveTo="opacity-0 "
       >
         <div className="sm:hidden bg-sadOrange ">
-          <a href="#" className="block py-2 px-4 text-white  ">
+          <Link to="/" className="text-white  block py-2 px-4">
             Home
-          </a>
-          <a href="#" className="block py-2 px-4 text-white ">
+          </Link>
+          <Link to="/register" className="text-white block py-2 px-4 ">
             ID Card Registration Form
-          </a>
-          <a href="#" className="block py-2 px-4 text-white ">
-            Menu Item 3
-          </a>
+          </Link>
         </div>
       </Transition>
     </header>
