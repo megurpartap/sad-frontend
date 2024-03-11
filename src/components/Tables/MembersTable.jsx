@@ -40,20 +40,22 @@ const columns = [
     header: () => <div className="text-center">Full Name</div>,
     cell: (props) => <p className="text-center">{props.getValue()}</p>,
   },
-  {
-    accessorFn: (row) => row.attributes.email,
-    id: "email",
-    header: () => <div className="text-center">Email-Id</div>,
-    cell: (props) => <p className="text-center">{props.getValue()}</p>,
-  },
-  {
-    accessorFn: (row) => row.attributes.adhaarNumber,
-    id: "adhaarNumber",
-    header: () => <div className="text-center">Adhaar Number</div>,
-    cell: (props) => (
-      <p className="text-center">XXXXXXXX{props.getValue().slice(8)}</p>
-    ),
-  },
+  // {
+  //   accessorFn: (row) => row.attributes.email,
+  //   id: "email",
+  //   header: () => <div className="text-center">Email-Id</div>,
+  //   cell: (props) => <p className="text-center">{props.getValue()}</p>,
+  // },
+  // {
+  //   accessorFn: (row) => row.attributes.adhaarNumber,
+  //   id: "adhaarNumber",
+  //   header: () => <div className="text-center">Adhaar Number</div>,
+  //   cell: (props) => (
+  //     <p className="text-center">
+  //       {props.getValue() ? `XXXXXXXX${props.getValue().slice(8)}` : "-"}
+  //     </p>
+  //   ),
+  // },
   {
     accessorFn: (row) => row.attributes.mobileNumber,
     id: "mobileNumber",

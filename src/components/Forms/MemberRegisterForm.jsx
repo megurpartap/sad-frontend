@@ -30,6 +30,7 @@ import memberService from "@/services/crudServices/memberServices";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { Label } from "../ui/label";
 
 const skills = [
   {
@@ -72,57 +73,57 @@ const formSchema = z.object({
       required_error: "Full Name is required",
     })
     .min(1, "Full Name is required"),
-  email: z
-    .string({
-      required_error: "email-Id is required",
-    })
-    .email({ message: "Invalid email address" }),
-  adhaarNumber: z
-    .string({
-      required_error: "Adhaar Card Number is required",
-    })
-    .length(12, "Adhaar Card Number is required"),
+  // email: z
+  //   .string({
+  //     required_error: "email-Id is required",
+  //   })
+  //   .email({ message: "Invalid email address" }),
+  // adhaarNumber: z
+  //   .string({
+  //     required_error: "Adhaar Card Number is required",
+  //   })
+  //   .length(12, "Adhaar Card Number is required"),
   fatherHusbandName: z
     .string({
       required_error: "Father/Husband Name is required",
     })
     .min(1, "Father/Husband Name is required"),
   isHusbandName: z.boolean(),
-  mobileNumber: z
-    .string({
-      required_error: "Mobile Number is required",
-    })
-    .min(10, "Enter Valid Mobile Number"),
-  state: z
-    .string({
-      required_error: "State is required",
-    })
-    .min(1, "State is required"),
-  country: z
-    .string({
-      required_error: "Country is required",
-    })
-    .min(1, "Country is required"),
-  district: z
-    .string({
-      required_error: "District is required",
-    })
-    .min(1, "District is required"),
-  village: z.string().optional(),
-  tehsil: z.string().optional(),
+  // mobileNumber: z
+  //   .string({
+  //     required_error: "Mobile Number is required",
+  //   })
+  //   .min(10, "Enter Valid Mobile Number"),
+  // state: z
+  //   .string({
+  //     required_error: "State is required",
+  //   })
+  //   .min(1, "State is required"),
+  // country: z
+  //   .string({
+  //     required_error: "Country is required",
+  //   })
+  //   .min(1, "Country is required"),
+  // district: z
+  //   .string({
+  //     required_error: "District is required",
+  //   })
+  //   .min(1, "District is required"),
+  // village: z.string().optional(),
+  // tehsil: z.string().optional(),
   fullAddress: z
     .string({
       required_error: "Full Address is required",
     })
     .min(1, "Full Address is required"),
-  volunteerRegion: z
-    .string({
-      required_error: "Volunteer Region is required",
-    })
-    .min(1, "Volunteer Region is required"),
-  skills: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one item.",
-  }),
+  // volunteerRegion: z
+  //   .string({
+  //     required_error: "Volunteer Region is required",
+  //   })
+  //   .min(1, "Volunteer Region is required"),
+  // skills: z.array(z.string()).refine((value) => value.some((item) => item), {
+  //   message: "You have to select at least one item.",
+  // }),
 });
 
 const MemberRegisterForm = ({ redirectUrl }) => {
@@ -144,11 +145,11 @@ const MemberRegisterForm = ({ redirectUrl }) => {
       state: undefined,
       district: undefined,
       photo: undefined,
-      village: undefined,
-      tehsil: undefined,
+      // village: undefined,
+      // tehsil: undefined,
       fullAddress: undefined,
-      volunteerRegion: undefined,
-      skills: [],
+      // volunteerRegion: undefined,
+      // skills: [],
     },
   });
 
@@ -193,7 +194,7 @@ const MemberRegisterForm = ({ redirectUrl }) => {
     }
   }
   return (
-    <div className="sm:w-[700px] sm:border-[1px] border-gray-400 bg-white w-full sm:rounded-lg sm:shadow p-4 relative z-10">
+    <div className="sm:w-[1000px] sm:border-[1px] border-gray-400 bg-white w-full sm:rounded-lg sm:shadow p-4 relative z-10">
       <div className="formHeader  flex flex-col items-center sm:flex-row sm:justify-around border-b-2 border-gray-100 pb-6 ">
         <div className=" sm:w-2/12 w-1/3 flex items-center justify-center">
           <img src="/sad-logo.png" alt="" className="w-full" />
@@ -207,7 +208,18 @@ const MemberRegisterForm = ({ redirectUrl }) => {
       <div className="formBody py-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* full Name and email */}
+            {/* photo */}
+            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
+              <Label>Upload Your Photo</Label>
+              <input
+                type="file"
+                placeholder="Upload Photo"
+                name="photo"
+                id="photo"
+                onChange={(e) => setPhotoValue(e.target.files[0])}
+              />
+            </div>
+            {/* full Name and fathers name */}
             <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
@@ -223,43 +235,7 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="email"
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Enter Email / ਤੁਹਾਡੀ ਈ-ਮੇਲ ਆਈਡੀ</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter Email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {/* adhaar card and father husband */}
-            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
-              <FormField
-                control={form.control}
-                name="adhaarNumber"
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Enter Adhaar Card Number / ਤੁਹਾਡਾ ਅਧਾਰ <br />
-                      ਕਾਰਡ ਨੰਬਰ
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter Adhaar Card Number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <div>
                 <FormField
                   control={form.control}
@@ -301,8 +277,55 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                 />
               </div>
             </div>
-            {/* country and mobile */}
+            {/* email and number*/}
             <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enter Email / ਤੁਹਾਡੀ ਈ-ਮੇਲ ਆਈਡੀ</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="mobileNumber"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enter Phone Number / ਤੁਹਾਡਾ ਫੋਨ ਨੰਬਰ</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter Phone Number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            {/* address */}
+            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
+              <FormField
+                control={form.control}
+                name="fullAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enter Full Address / ਤੁਹਾਡਾ ਪੂਰਾ ਪਤਾ</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Enter Full Address " {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            {/* country ,state and district*/}
+            <div className=" sm:grid sm:grid-cols-3 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="country"
@@ -330,23 +353,6 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="mobileNumber"
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Enter Phone Number / ਤੁਹਾਡਾ ਫੋਨ ਨੰਬਰ</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter Phone Number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {/* state and district */}
-            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               {watchCountry === "India" ? (
                 <div>
                   <FormField
@@ -443,24 +449,31 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                 />
               )}
             </div>
-            {/* address */}
+            {/* adhaar card*/}
             <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
-                name="fullAddress"
+                name="adhaarNumber"
+                rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enter Full Address / ਤੁਹਾਡਾ ਪੂਰਾ ਪਤਾ</FormLabel>
+                    <FormLabel>
+                      Enter Adhaar Card Number / ਤੁਹਾਡਾ ਅਧਾਰ ਕਾਰਡ ਨੰਬਰ
+                    </FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Enter Full Address " {...field} />
+                      <Input
+                        placeholder="Enter Adhaar Card Number"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+
             {/* village and tehsil */}
-            <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
+            {/* <div className=" sm:grid sm:grid-cols-2 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="village"
@@ -489,18 +502,9 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                   </FormItem>
                 )}
               />
-            </div>
-            {/* photo */}
-            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
-              <input
-                type="file"
-                name="photo"
-                id="photo"
-                onChange={(e) => setPhotoValue(e.target.files[0])}
-              />
-            </div>
+            </div> */}
             {/* skills */}
-            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
+            {/* <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="skills"
@@ -553,9 +557,9 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
             {/* volunteer region */}
-            <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
+            {/* <div className=" sm:grid sm:grid-cols-1 sm:grid-rows-1 gap-4">
               <FormField
                 control={form.control}
                 name="volunteerRegion"
@@ -575,7 +579,7 @@ const MemberRegisterForm = ({ redirectUrl }) => {
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
             <div className="border-t-2 sm:flex border-gray-100 pt-6">
               <Button
                 variant="primary"

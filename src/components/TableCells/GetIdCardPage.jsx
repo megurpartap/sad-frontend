@@ -14,7 +14,7 @@ const GetIdCardPage = ({ row }) => {
       format: [3.3, 2.1],
     });
     const qrurl = await imageToBase64(
-      "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http:localhost/memberDetails/9"
+      `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${conf.domain}/memberDetails/${row.original.id}`
     );
     const image = await imageToBase64(
       `${conf.strapiUrl}${member.photo.data.attributes.url}`
