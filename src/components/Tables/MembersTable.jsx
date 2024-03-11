@@ -21,17 +21,20 @@ import ActiveSwitch from "../TableCells/ActiveSwitch";
 import GetIdCardPage from "@/components/TableCells/GetIdCardPage";
 import BlockButton from "../TableCells/BlockButton";
 import IsWorkerCheckBox from "../TableCells/RoleChanger";
+import RoleChanger from "../TableCells/RoleChanger";
 // import { Card, Typography, Input } from "@material-tailwind/react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const columns = [
   {
-    accessorFn: (row) => row.id,
-    id: "id",
-    header: () => <div className="text-center">ID</div>,
+    accessorFn: (row) => row.attributes.manualId,
+    id: "manualId",
+    header: () => <div className="text-center">Serial Number</div>,
     cell: (props) => (
-      <p className="text-center">{`SADA-${Number(props.getValue()) + 1000}`}</p>
+      <p className="text-center">
+        {props.getValue() ? `SADA-${props.getValue()}` : "-"}
+      </p>
     ),
   },
   {
@@ -73,9 +76,10 @@ const columns = [
     cell: ActiveSwitch,
   },
   {
-    id: "isWorker",
-    header: () => <div className="text-center">Worker</div>,
-    cell: IsWorkerCheckBox,
+    accessorFn: (row) => row.attributes.memberRole,
+    id: "memberRole",
+    header: () => <div className="text-center">Member Role</div>,
+    cell: RoleChanger,
   },
   {
     id: "idcard",
@@ -90,20 +94,32 @@ const columns = [
 ];
 
 function MembersTable({ tableData }) {
+  const [data, setData] = useState(tableData);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFiltering, setGlobalFiltering] = useState("");
   const MembersTable = useReactTable({
-    data: tableData,
+    data: data,
     columns,
-    // state: {
-    //   columnFilters,
-    //   globalFilter: globalFiltering,
-    // },
+    meta: {
+      updateData: (rowIndex, columnId, value) => {
+        setData((prev) =>
+          prev.map((row, i) =>
+            i === rowIndex
+              ? {
+                  id: row["id"],
+                  attributes: {
+                    ...prev[rowIndex]["attributes"],
+                    [columnId]: value,
+                  },
+                }
+              : row
+          )
+        );
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
-    // getFilteredRowModel: getFilteredRowModel(),
-    // onGlobalFilterChange: setGlobalFiltering,
   });
-
+  console.log(data);
   return (
     <>
       {/* <div className="flex gap-8 px-4 pt-4">

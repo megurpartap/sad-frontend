@@ -12,7 +12,7 @@ import {
 } from "../ui/select";
 import roles from "@/constants/roles";
 
-const RoleChanger = ({ row }) => {
+const RoleChanger = ({ row, table, column }) => {
   const { toast } = useToast();
   const memberId = row.original.id;
   const memberData = row.original.attributes;
@@ -22,12 +22,14 @@ const RoleChanger = ({ row }) => {
     memberService
       .manageMember({ memberRole: e }, memberId)
       .then((res) => {
+        table.options.meta?.updateData(row.index, column.id, e);
         toast({
           variant: "success",
           title: `${memberData.fullName} is now ${e}`,
         });
       })
       .catch((err) => {
+        console.log(err);
         toast({
           variant: "destructive",
           title: `Could not change role of ${memberData.fullName} to ${e}`,
