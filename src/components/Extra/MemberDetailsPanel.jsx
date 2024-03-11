@@ -12,7 +12,7 @@ const MemberDetailsPanel = ({ memberData }) => {
         <div className=" sm:w-9/12 flex items-center justify-center">
           <h1 className="text-2xl sm:text-5xl text-center font-bold">
             Shiromani Akali Dal Amritsar{" "}
-            {memberData.isWorker ? "Worker" : "Member"} Details
+            {memberData.memberRole ? memberData.memberRole : "Member"} Details
           </h1>
         </div>
       </div>
@@ -78,7 +78,9 @@ const MemberDetailsPanel = ({ memberData }) => {
         {/* Verified */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">
-            {memberData.isWorker ? "Worker" : "Member"} Verification Status
+            {`${
+              memberData.memberRole ? memberData.memberRole : "Member"
+            } Verification Status`}
           </h4>
           <Badge className="bg-green-600 w-min hover:bg-green-600 font-bold">
             Verified

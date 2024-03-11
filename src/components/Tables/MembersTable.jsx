@@ -20,7 +20,7 @@ import ActionButton from "../TableCells/ActionButton";
 import ActiveSwitch from "../TableCells/ActiveSwitch";
 import GetIdCardPage from "@/components/TableCells/GetIdCardPage";
 import BlockButton from "../TableCells/BlockButton";
-import IsWorkerCheckBox from "../TableCells/IsWorkerCheckBox";
+import IsWorkerCheckBox from "../TableCells/RoleChanger";
 // import { Card, Typography, Input } from "@material-tailwind/react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -60,7 +60,7 @@ const columns = [
     accessorFn: (row) => row.attributes.mobileNumber,
     id: "mobileNumber",
     header: () => <div className="text-center">Mobile Number</div>,
-    cell: (props) => <p className="text-center">{props.getValue()}</p>,
+    cell: (props) => <p className="text-center">{props.getValue() || "-"}</p>,
   },
   {
     id: "view",
