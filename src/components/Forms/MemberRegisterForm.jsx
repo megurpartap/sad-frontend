@@ -73,42 +73,18 @@ const formSchema = z.object({
       required_error: "Full Name is required",
     })
     .min(1, "Full Name is required"),
-  // email: z
-  //   .string({
-  //     required_error: "email-Id is required",
-  //   })
-  //   .email({ message: "Invalid email address" }),
-  // adhaarNumber: z
-  //   .string({
-  //     required_error: "Adhaar Card Number is required",
-  //   })
-  //   .length(12, "Adhaar Card Number is required"),
+  email: z.string().optional(),
+  adhaarNumber: z.string().optional(),
   fatherHusbandName: z
     .string({
       required_error: "Father/Husband Name is required",
     })
     .min(1, "Father/Husband Name is required"),
   isHusbandName: z.boolean(),
-  // mobileNumber: z
-  //   .string({
-  //     required_error: "Mobile Number is required",
-  //   })
-  //   .min(10, "Enter Valid Mobile Number"),
-  // state: z
-  //   .string({
-  //     required_error: "State is required",
-  //   })
-  //   .min(1, "State is required"),
-  // country: z
-  //   .string({
-  //     required_error: "Country is required",
-  //   })
-  //   .min(1, "Country is required"),
-  // district: z
-  //   .string({
-  //     required_error: "District is required",
-  //   })
-  //   .min(1, "District is required"),
+  mobileNumber: z.string().optional(),
+  state: z.string().optional(),
+  country: z.string().optional(),
+  district: z.string().optional(),
   // village: z.string().optional(),
   // tehsil: z.string().optional(),
   fullAddress: z
@@ -282,7 +258,6 @@ const MemberRegisterForm = ({ redirectUrl }) => {
               <FormField
                 control={form.control}
                 name="email"
-                rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Enter Email / ਤੁਹਾਡੀ ਈ-ਮੇਲ ਆਈਡੀ</FormLabel>
@@ -296,7 +271,6 @@ const MemberRegisterForm = ({ redirectUrl }) => {
               <FormField
                 control={form.control}
                 name="mobileNumber"
-                rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Enter Phone Number / ਤੁਹਾਡਾ ਫੋਨ ਨੰਬਰ</FormLabel>

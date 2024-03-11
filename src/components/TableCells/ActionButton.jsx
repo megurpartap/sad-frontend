@@ -64,6 +64,10 @@ const ActionButton = ({ row }) => {
                     "isActive",
                     "isWorker",
                     "photo",
+                    "skills",
+                    "volunteerRegion",
+                    "village",
+                    "tehsil",
                   ].includes(key)
                 ) {
                   return (

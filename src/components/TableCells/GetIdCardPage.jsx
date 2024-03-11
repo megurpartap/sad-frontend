@@ -23,10 +23,10 @@ const GetIdCardPage = ({ row }) => {
     doc.addImage(image, 0.3, 0.3, 0.6, 0.9);
     doc.setFontSize(8);
     doc.text(member.fullName, 1.2, 0.5);
-    doc.text(member.adhaarNumber, 1.2, 0.7);
-    doc.text(member.mobileNumber, 1.2, 0.9);
+    // doc.text(member.adhaarNumber, 1.2, 0.7);
+    // doc.text(member.mobileNumber, 1.2, 0.9);
     doc.text(member.fullAddress, 1.2, 1.1);
-    doc.text(member.email, 1.2, 1.3);
+    // doc.text(member.email, 1.2, 1.3);
     doc.save(`${member.fullName}-SADA-${Number(row.original.id) + 1000}.pdf`);
   };
 
