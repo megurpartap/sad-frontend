@@ -14,7 +14,7 @@ const GetIdCardPage = ({ row }) => {
       format: [3.3, 2.1],
     });
     const qrurl = await imageToBase64(
-      `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${conf.domain}/memberDetails/${row.original.id}`
+      `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${conf.domain}/memberDetails/${member.uid}`
     );
     const image = await imageToBase64(
       `${conf.strapiUrl}${member.photo.data.attributes.url}`
@@ -27,7 +27,7 @@ const GetIdCardPage = ({ row }) => {
     // doc.text(member.mobileNumber, 1.2, 0.9);
     doc.text(member.fullAddress, 1.2, 1.1);
     // doc.text(member.email, 1.2, 1.3);
-    doc.save(`${member.fullName}-SADA-${Number(row.original.id) + 1000}.pdf`);
+    doc.save(`${member.fullName}-${member.uid}.pdf`);
   };
 
   return (

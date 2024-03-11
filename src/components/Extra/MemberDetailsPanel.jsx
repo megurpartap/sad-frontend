@@ -42,38 +42,40 @@ const MemberDetailsPanel = ({ memberData }) => {
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">Adhaar Number</h4>
           <h4 className=" text-xl">
-            XXXXXXXX{memberData.adhaarNumber.slice(8)}
+            {memberData.adhaarNumber
+              ? `XXXXXXXX${memberData.adhaarNumber.slice(8)}`
+              : "-"}
           </h4>
         </div>
         {/* Country */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">Country</h4>
-          <h4 className=" text-xl">{memberData.country}</h4>
+          <h4 className=" text-xl">{memberData.country || "-"}</h4>
         </div>
         {/* State */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">State</h4>
-          <h4 className=" text-xl">{memberData.state}</h4>
+          <h4 className=" text-xl">{memberData.state || "-"}</h4>
         </div>
         {/* District */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">District</h4>
-          <h4 className=" text-xl">{memberData.district}</h4>
+          <h4 className=" text-xl">{memberData.district || "-"}</h4>
         </div>
         {/* Address */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">Address</h4>
-          <h4 className=" text-xl">{memberData.fullAddress}</h4>
+          <h4 className=" text-xl">{memberData.fullAddress || "-"}</h4>
         </div>
         {/* Phone */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">Phone</h4>
-          <h4 className=" text-xl">{memberData.mobileNumber}</h4>
+          <h4 className=" text-xl">{memberData.mobileNumber || "-"}</h4>
         </div>
         {/* Email */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">
           <h4 className=" text-xl font-bold">Email</h4>
-          <h4 className=" text-xl">{memberData.email}</h4>
+          <h4 className=" text-xl">{memberData.email || "-"}</h4>
         </div>
         {/* Verified */}
         <div className="grid grid-cols-2 py-3 border-b-[1px] ">

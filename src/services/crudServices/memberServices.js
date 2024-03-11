@@ -149,10 +149,9 @@ export class MemberService {
   };
 
   getIsActive = async (memberId) => {
-    console.log(memberId);
     try {
       const res = await axios.get(
-        `${conf.strapiUrl}/api/member/${Number(memberId)}/isActiveMember`
+        `${conf.strapiUrl}/api/member/${memberId}/isActiveMember`
       );
       if (res.data) return res.data;
       return null;
