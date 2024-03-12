@@ -25,7 +25,7 @@ const GetIdCardPage = ({ row }) => {
       `${conf.strapiUrl}${member.photo.data.attributes.url}`
     );
     const footer = await imageToBase64("/idcardfooter.png");
-    const cardBack = await imageToBase64("/cardBack.jpg");
+    const cardBack = await imageToBase64("/cardBack.png");
     doc.addFileToVFS("nunitoBold", fonts.nunitoBold);
     doc.addFont("nunitoBold", "nunito", "bold");
     doc.addFileToVFS("nunitoRegular", fonts.nunitoRegular);
@@ -44,17 +44,20 @@ const GetIdCardPage = ({ row }) => {
       doc.text("Father's Name:", 89, 62);
     }
     doc.text("Address:", 89, 77);
-    doc.text("Serial Number:", 89, 121);
-    doc.text("Date of Issue:", 89, 137);
+    doc.text("Designation:", 89, 121);
+    doc.text("Serial Number:", 89, 137);
+    doc.text("Date of Issue:", 89, 152);
+    doc.text(member.mobileNumber, 30, 170);
     doc.setFont("nunito", "regular");
     doc.text(member.fullName, 168, 47);
     doc.text(member.fatherHusbandName, 168, 62);
     doc.text(member.fullAddress, 168, 77, { maxWidth: 130 });
-    doc.text(`SADA-${member.manualId}`, 168, 121);
-    doc.text(format(member.doj, "PPP"), 168, 137);
+    doc.text(member.memberRole, 168, 121);
+    doc.text(`SADA-${member.manualId}`, 168, 137);
+    doc.text(format(member.doj, "PPP"), 168, 152);
     doc.setTextColor("#0C007C");
     doc.setFont("nunito", "bold");
-    doc.text(`Shiromani Akali Dal Amritsar ${member.memberRole}`, 74, 22);
+    doc.text(`Shiromani Akali Dal Amritsar Member`, 74, 22);
     doc.addPage();
     doc.addImage(cardBack, 0, 0, 320, 205);
     doc.save(`${member.fullName}-SADA-${member.uid}.pdf`);
