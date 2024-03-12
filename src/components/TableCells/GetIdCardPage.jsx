@@ -47,7 +47,9 @@ const GetIdCardPage = ({ row }) => {
     doc.text("Designation:", 89, 121);
     doc.text("Serial Number:", 89, 137);
     doc.text("Date of Issue:", 89, 152);
-    doc.text(member.mobileNumber, 30, 170);
+    if (member.mobileNumber) {
+      doc.text(member.mobileNumber, 30, 170);
+    }
     doc.setFont("nunito", "regular");
     doc.text(member.fullName, 168, 47);
     doc.text(member.fatherHusbandName, 168, 62);
