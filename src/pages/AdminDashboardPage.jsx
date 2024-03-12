@@ -1,5 +1,6 @@
 import AddAdminButton from "@/components/Extra/AddAdminButton";
 import MembersTable from "@/components/Tables/MembersTable";
+import { Input } from "@/components/ui/input";
 import memberService from "@/services/crudServices/memberServices";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -37,7 +38,7 @@ const AdminDashboardPage = () => {
   }
   return (
     <div className="mx-5">
-      <div className="flex justify-end mb-3">
+      <div className="flex justify-end items-center mb-3">
         <AddAdminButton />
       </div>
       {!loading && data?.length > 0 && <MembersTable tableData={data} />}

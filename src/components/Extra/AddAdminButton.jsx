@@ -67,7 +67,7 @@ function AddAdminButton() {
   }
 
   return (
-    <>
+    <div>
       <Dialog>
         <DialogTrigger>
           <Button variant="primary" className="mt-4">
@@ -162,7 +162,7 @@ function AddAdminButton() {
           <MemberRegisterForm redirectUrl="reload" />
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
 

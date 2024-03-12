@@ -1,3 +1,4 @@
+import { AiOutlineSearch } from "react-icons/ai";
 import { CgMoreAlt } from "react-icons/cg";
 import {
   flexRender,
@@ -22,6 +23,7 @@ import GetIdCardPage from "@/components/TableCells/GetIdCardPage";
 import BlockButton from "../TableCells/BlockButton";
 import IsWorkerCheckBox from "../TableCells/RoleChanger";
 import RoleChanger from "../TableCells/RoleChanger";
+import { Input } from "../ui/input";
 // import { Card, Typography, Input } from "@material-tailwind/react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -95,7 +97,6 @@ const columns = [
 
 function MembersTable({ tableData }) {
   const [data, setData] = useState(tableData);
-  const [columnFilters, setColumnFilters] = useState([]);
   const [globalFiltering, setGlobalFiltering] = useState("");
   const MembersTable = useReactTable({
     data: data,
@@ -117,49 +118,25 @@ function MembersTable({ tableData }) {
         );
       },
     },
+    state: {
+      globalFilter: globalFiltering,
+    },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setGlobalFiltering,
   });
   console.log(data);
   return (
     <>
-      {/* <div className="flex gap-8 px-4 pt-4">
-        <MembersTableFilters
-          columnFilters={columnFilters}
-          setColumnFilters={setColumnFilters}
-        />
+      <div className="flex sm:-mt-12">
         <Input
-          label="Search"
+          className="sm:w-1/4 mb-3"
+          placeholder="Search"
+          icon={<AiOutlineSearch />}
           value={globalFiltering}
           onChange={(e) => setGlobalFiltering(e.target.value)}
-          icon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
         />
-      </div> */}
-      {/* <div className="flex w-full justify-end px-5 mt-4 gap-5">
-        <div className="flex items-center gap-2">
-          <div
-            className={`max-w-[4px] max-h-[4px] rounded-full p-[3px] bg-green-500`}
-          ></div>
-          <Typography variant="small">Available</Typography>
-        </div>
-        <div className="flex items-center gap-2">
-          <div
-            className={`max-w-[4px] max-h-[4px] rounded-full p-[3px] bg-red-500`}
-          ></div>
-          <Typography variant="small">On Route</Typography>
-        </div>
-        <div className="flex items-center gap-2">
-          <div
-            className={`max-w-[4px] max-h-[4px] rounded-full p-[3px] bg-yellow-500`}
-          ></div>
-          <Typography variant="small">On Holiday</Typography>
-        </div>
-        <div className="flex items-center gap-2">
-          <div
-            className={`max-w-[4px] max-h-[4px] rounded-full p-[3px] bg-blue-500`}
-          ></div>
-          <Typography variant="small">On Sleep</Typography>
-        </div>
-      </div> */}
+      </div>
       <div className="rounded-md border">
         <Table className="w-full rounded-none min-w-max table-auto text-left">
           <TableHeader>
