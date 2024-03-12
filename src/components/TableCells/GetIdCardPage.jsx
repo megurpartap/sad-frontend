@@ -35,8 +35,8 @@ const GetIdCardPage = ({ row }) => {
       doc.addImage(qrurl, 23, 100, 55, 55);
       doc.addImage(image, 23, 37, 55, 55);
       doc.addImage(footer, 0, 141, 325, 64);
-      doc.setDrawColor("#0C007C");
-      doc.roundedRect(50, 10, 226, 17, 4, 4);
+      // doc.setDrawColor("#0C007C");
+      // doc.roundedRect(50, 10, 226, 17, 4, 4);
       doc.setFontSize(12);
       doc.setFont("nunito", "bold");
       doc.text("Name:", 89, 47);
@@ -46,26 +46,28 @@ const GetIdCardPage = ({ row }) => {
         doc.text("Father's Name:", 89, 62);
       }
       doc.text("Address:", 89, 77);
-      doc.text("Designation:", 89, 121);
-      doc.text("Serial Number:", 89, 137);
-      doc.text("Date of Issue:", 89, 152);
+      doc.text("Designation:", 89, 115);
+      doc.text("Serial Number:", 89, 131);
+      doc.text("Date of Issue:", 89, 146);
       if (member.mobileNumber) {
+        const phoneIcon = await imageToBase64("/phoneIcon.png");
+        doc.addImage(phoneIcon, 16, 162, 10, 10);
         doc.text(member.mobileNumber, 30, 170);
       }
       doc.setFont("nunito", "regular");
       doc.text(member.fullName, 168, 47);
       doc.text(member.fatherHusbandName, 168, 62);
       doc.text(member.fullAddress, 168, 77, { maxWidth: 130 });
-      doc.text(member.memberRole, 168, 121);
+      doc.text(member.memberRole, 168, 115);
       if (member.manualId) {
-        doc.text(`SADA-${member.manualId}`, 168, 137);
+        doc.text(`SADA-${member.manualId}`, 168, 131);
       }
       if (member.doj) {
-        doc.text(format(member.doj, "PPP"), 168, 152);
+        doc.text(format(member.doj, "PPP"), 168, 146);
       }
-      doc.setTextColor("#0C007C");
-      doc.setFont("nunito", "bold");
-      doc.text(`Shiromani Akali Dal Amritsar Member`, 74, 22);
+      // doc.setTextColor("#0C007C");
+      // doc.setFont("nunito", "bold");
+      // doc.text(`Shiromani Akali Dal Amritsar Member`, 74, 22);
       doc.addPage();
       doc.addImage(cardBack, 0, 0, 320, 205);
       doc.save(`${member.fullName}-SADA-${member.uid}.pdf`);
