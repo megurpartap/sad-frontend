@@ -124,38 +124,13 @@ const ActionButton = ({ row, column, table }) => {
                       <DialogHeader>
                         <DialogTitle>Edit Date of Issue</DialogTitle>
                         <DialogDescription>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-[240px] justify-start text-left font-normal mt-2",
-                                  !doj && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {doj ? (
-                                  format(doj, "PPP")
-                                ) : (
-                                  <span>Select Date of Issue</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="end"
-                              side="down"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={doj}
-                                onSelect={(e) => {
-                                  setDoj(moment(e).format("YYYY-MM-DD"));
-                                }}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
+                          <Input
+                            className="w-[240px] justify-start text-left font-normal mt-2"
+                            type="date"
+                            placeholder="Enter Date of Issue"
+                            value={doj || ""}
+                            onChange={(e) => setDoj(e.target.value)}
+                          />
                         </DialogDescription>
                         <DialogFooter>
                           <Button size="sm" onClick={() => changeDoj()}>
